@@ -35,7 +35,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int index = 0;
 
   void _onNextPressed() {
-    if (index > OnboardingScreen._onboarding.pagesCount - 1) return;
+    if (index >= OnboardingScreen._onboarding.pagesCount - 1) return;
     setState(() {
       index++;
     });
@@ -58,9 +58,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ContentBloc(
+                pageIndex: index,
                 title: OnboardingScreen._onboarding.getPage(index).title,
                 body: OnboardingScreen._onboarding.getPage(index).description,
-                pageIndex: index,
                 svgImage: OnboardingScreen._onboarding.getPage(index).image,
                 pageCount: OnboardingScreen._onboarding.pagesCount,
               ),
