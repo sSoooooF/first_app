@@ -29,7 +29,7 @@ class ContentBloc extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SvgPicture.asset(_svgImage),
+        SvgPicture.string(_svgImage),
         const SizedBox(
           height: 32,
         ),
