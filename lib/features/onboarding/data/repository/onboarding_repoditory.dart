@@ -5,16 +5,16 @@ abstract interface class IOnboardingRepository {
   Future<OnboardingEntity> getOnboarding();
 }
 
-final class OnboardingRepoditory implements IOnboardingRepository {
+final class OnboardingRepository implements IOnboardingRepository {
   final RestClient _client;
 
-  OnboardingRepoditory({required RestClient client}) : _client = client;
+  OnboardingRepository({required RestClient client}) : _client = client;
 
   @override
   Future<OnboardingEntity> getOnboarding() async {
     final data = await _client.getOnboarding();
 
-    final pageEnities = data.pages
+    final pageEntities = data.pages
         .map((page) => OnboardingPageEntity(
               title: page.title,
               description: page.description,
@@ -22,7 +22,7 @@ final class OnboardingRepoditory implements IOnboardingRepository {
             ))
         .toList();
 
-    final result = OnboardingEntity(pages: pageEnities);
+    final result = OnboardingEntity(pages: pageEntities);
 
     return result;
   }

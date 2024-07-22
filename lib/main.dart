@@ -9,7 +9,7 @@ void main() {
 }
 
 final client = RestClient(Dio());
-final repository = OnboardingRepoditory(client: client);
+final repository = OnboardingRepository(client: client);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
