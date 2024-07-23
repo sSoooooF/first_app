@@ -100,6 +100,7 @@ class _PageNumberPointer extends StatelessWidget {
 }
 
 class ControlButtons extends StatelessWidget {
+  final bool _isLastPage;
   final VoidCallback _onNextPressed;
   final VoidCallback _onSkipPressed;
 
@@ -107,21 +108,25 @@ class ControlButtons extends StatelessWidget {
     super.key,
     required VoidCallback onNextPressed,
     required VoidCallback onSkipPressed,
+    required bool isLastPage,
   })  : _onNextPressed = onNextPressed,
-        _onSkipPressed = onSkipPressed;
+        _onSkipPressed = onSkipPressed,
+        _isLastPage = isLastPage;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        TextButton(
-          onPressed: _onSkipPressed,
-          child: const Text('Пропустить'),
-        ),
+        if (!_isLastPage)
+          TextButton(
+            onPressed: _onSkipPressed,
+            child: const Text('Пропустить'),
+          ),
+        const Spacer(),
         FilledButton(
           onPressed: _onNextPressed,
-          child: const Text('Продолжить'),
+          child: _isLastPage ? const Text('Начать') : const Text('Продолжить'),
         ),
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:first_app/api/rest_client.dart';
 import 'package:first_app/features/onboarding/data/repository/onboarding_repoditory.dart';
+import 'package:first_app/features/onboarding/presentation/screens/get_started_screen.dart';
 import 'package:first_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -20,9 +21,11 @@ class MyApp extends StatelessWidget {
       title: 'Задачник',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff336940)),
+        fontFamily: 'Roboto',
+
       ),
-      home: OnboardingScreen(
-        repository: repository,
+      home: GetStarted(
+        // repository: repository,
       ),
     );
   }

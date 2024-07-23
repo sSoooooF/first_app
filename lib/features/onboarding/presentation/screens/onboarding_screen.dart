@@ -4,26 +4,8 @@ import 'package:first_app/features/onboarding/presentation/widgets/onboarding_wi
 import 'package:flutter/material.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  // static const _onboarding = OnboardingEntity(
-  //   pages: [
-  //     OnboardingPageEntity(
-  //       title: 'Welcome to the App 1',
-  //       description: 'This is a simple onboarding screen 1',
-  //       image: 'images/icon.svg',
-  //     ),
-  //     OnboardingPageEntity(
-  //       title: 'Welcome to the App 2',
-  //       description: 'This is a simple onboarding screen 2',
-  //       image: 'images/icon.svg',
-  //     ),
-  //     OnboardingPageEntity(
-  //       title: 'Welcome to the App 3',
-  //       description: 'This is a simple onboarding screen 3',
-  //       image: 'images/icon.svg',
-  //     ),
-  //   ],
-  // );
   final IOnboardingRepository repository;
+
   const OnboardingScreen({
     super.key,
     required this.repository,
@@ -36,6 +18,8 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   OnboardingEntity? onboardingEntity;
   int index = 0;
+
+  bool get isLastPage => index >= onboardingEntity!.pagesCount - 1;
 
   void _onNextPressed() {
     if (onboardingEntity == null) return;
@@ -84,9 +68,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       pageCount: onboardingEntity!.pagesCount,
                     ),
                     ControlButtons(
+                      isLastPage: isLastPage,
                       onNextPressed: _onNextPressed,
                       onSkipPressed: _onSkipPressed,
-                    ),
+                    )
                   ],
                 ),
         ),
