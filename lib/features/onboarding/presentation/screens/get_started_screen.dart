@@ -31,15 +31,15 @@ class GetStarted extends StatelessWidget {
                   ],
                 ),
                 Column(
-                  mainAxisSize: MainAxisSize.m,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     FilledButton(
                       onPressed: () {},
                       style: ButtonStyle(
-                        maximumSize:
-                            WidgetStateProperty.all(Size.fromWidth(48)),
+                        fixedSize:
+                            WidgetStateProperty.all(const Size.fromHeight(40)),
                         minimumSize:
-                            WidgetStateProperty.all(Size.fromHeight(48)),
+                            WidgetStateProperty.all(const Size.fromHeight(40)),
                       ),
                       child: const Text('Войти'),
                     ),
@@ -49,8 +49,10 @@ class GetStarted extends StatelessWidget {
                     OutlinedButton(
                       onPressed: () {},
                       style: ButtonStyle(
-                        maximumSize:
-                            WidgetStateProperty.all(Size.fromHeight(40)),
+                        fixedSize:
+                            WidgetStateProperty.all(const Size.fromHeight(40)),
+                        minimumSize:
+                            WidgetStateProperty.all(const Size.fromHeight(40)),
                       ),
                       child: const Text('Зарегистироваться'),
                     )
