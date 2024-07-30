@@ -6,7 +6,8 @@ class GetStarted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
+    final textTheme = Theme.of(context).textTheme;
+    final buttonStyle = Theme.of(context).buttonTheme;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -36,10 +37,7 @@ class GetStarted extends StatelessWidget {
                     FilledButton(
                       onPressed: () {},
                       style: ButtonStyle(
-                        fixedSize:
-                            WidgetStateProperty.all(const Size.fromHeight(40)),
-                        minimumSize:
-                            WidgetStateProperty.all(const Size.fromHeight(40)),
+                        fixedSize: WidgetStateProperty.all(const Size(double.maxFinite, 40)),
                       ),
                       child: const Text('Войти'),
                     ),
@@ -49,10 +47,7 @@ class GetStarted extends StatelessWidget {
                     OutlinedButton(
                       onPressed: () {},
                       style: ButtonStyle(
-                        fixedSize:
-                            WidgetStateProperty.all(const Size.fromHeight(40)),
-                        minimumSize:
-                            WidgetStateProperty.all(const Size.fromHeight(40)),
+                        fixedSize: WidgetStateProperty.all(const Size.fromWidth(double.maxFinite)),
                       ),
                       child: const Text('Зарегистироваться'),
                     )

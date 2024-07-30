@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Roboto',
 
       ),
-      home: GetStarted(
-        // repository: repository,
+      home: OnboardingScreen(
+        repository: repository,
       ),
     );
   }
