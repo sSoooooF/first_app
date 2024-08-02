@@ -103,15 +103,18 @@ class ControlButtons extends StatelessWidget {
   final bool _isLastPage;
   final VoidCallback _onNextPressed;
   final VoidCallback _onSkipPressed;
+  final VoidCallback _onStartPressed;
 
   const ControlButtons({
     super.key,
     required VoidCallback onNextPressed,
     required VoidCallback onSkipPressed,
     required bool isLastPage,
+    required onStartPressed,
   })  : _onNextPressed = onNextPressed,
         _onSkipPressed = onSkipPressed,
-        _isLastPage = isLastPage;
+        _isLastPage = isLastPage,
+        _onStartPressed = onStartPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +128,7 @@ class ControlButtons extends StatelessWidget {
           ),
         const Spacer(),
         FilledButton(
-          onPressed: _onNextPressed,
+          onPressed: _isLastPage ? _onStartPressed : _onNextPressed,
           child: _isLastPage ? const Text('Начать') : const Text('Продолжить'),
         ),
       ],

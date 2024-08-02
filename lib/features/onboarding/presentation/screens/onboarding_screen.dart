@@ -1,7 +1,10 @@
 import 'package:first_app/features/onboarding/data/repository/onboarding_repoditory.dart';
-import 'package:first_app/features/onboarding/domain/onboarding_entity.dart';
+import 'package:first_app/features/onboarding/domain/bloc/onboarding_bloc.dart';
+import 'package:first_app/features/onboarding/presentation/screens/error_screen.dart';
+import 'package:first_app/features/onboarding/presentation/screens/get_started_screen.dart';
 import 'package:first_app/features/onboarding/presentation/widgets/onboarding_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final IOnboardingRepository repository;
@@ -16,64 +19,66 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  OnboardingEntity? onboardingEntity;
-  int index = 0;
-
-  bool get isLastPage => index >= onboardingEntity!.pagesCount - 1;
-
-  void _onNextPressed() {
-    if (onboardingEntity == null) return;
-    if (index >= onboardingEntity!.pagesCount - 1) return;
-    setState(() {
-      index++;
-    });
-  }
-
-  void _onSkipPressed() {
-    if (onboardingEntity == null) return;
-    setState(() {
-      index = onboardingEntity!.pagesCount - 1;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    widget.repository.getOnboarding().then((onboarding) => {
-          setState(() {
-            onboardingEntity = onboarding;
-          })
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding:
-              const EdgeInsets.only(top: 64, left: 32, right: 32, bottom: 32),
-          child: onboardingEntity == null
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ContentBloc(
-                      pageIndex: index,
-                      title: onboardingEntity!.getPage(index).title,
-                      body: onboardingEntity!.getPage(index).description,
-                      svgImage: onboardingEntity!.getPage(index).image,
-                      pageCount: onboardingEntity!.pagesCount,
-                    ),
-                    ControlButtons(
-                      isLastPage: isLastPage,
-                      onNextPressed: _onNextPressed,
-                      onSkipPressed: _onSkipPressed,
-                    )
-                  ],
-                ),
+    return BlocProvider<OnboardingBloc>(
+      create: (context) =>
+          OnboardingBloc(widget.repository)..add(OnStartLoading()),
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding:
+                const EdgeInsets.only(top: 64, left: 32, right: 32, bottom: 32),
+            child: BlocBuilder<OnboardingBloc, OnboardingState>(
+              builder: (context, state) {
+                switch (state) {
+                  case OnboardingLoading():
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  case OnboardingContent():
+                    final currentPage =
+                        state.onboardingEntity.getPage(state.pageNumber);
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ContentBloc(
+                          pageIndex: state.pageNumber,
+                          title: currentPage.title,
+                          body: currentPage.description,
+                          svgImage: currentPage.image,
+                          pageCount: state.onboardingEntity.pagesCount,
+                        ),
+                        ControlButtons(
+                            isLastPage: state.pageNumber >=
+                                state.onboardingEntity.pagesCount - 1,
+                            onNextPressed: () {
+                              context
+                                  .read<OnboardingBloc>()
+                                  .add(OnNextPagePressed());
+                            },
+                            onSkipPressed: () {
+                              context
+                                  .read<OnboardingBloc>()
+                                  .add(OnSkipPressed());
+                            },
+                            onStartPressed: () {
+                              context
+                                  .read<OnboardingBloc>()
+                                  .add(OnStartPressed());
+                            })
+                      ],
+                    );
+                  case OnboardingError():
+                    return ErrorScreen(onboardingError: state.error) as Widget;
+                  case _:
+                    return const Center(
+                      child: FlutterLogo(),
+                    );
+                }
+              },
+            ),
+          ),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:first_app/features/core/domain/entity/result.dart';
 import 'package:first_app/features/onboarding/data/repository/onboarding_repoditory.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -20,8 +21,13 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   Future<void> _onStartLoading(
       OnStartLoading event, Emitter<OnboardingState> emit) async {
     emit(OnboardingLoading());
-    final onboardingEntity = await repository.getOnboarding();
-    emit(OnboardingContent(onboardingEntity: onboardingEntity, pageNumber: 0));
+    final result = await repository.getOnboarding();
+    switch (result) {
+      case ResultOk(:final data):
+        emit(OnboardingContent(onboardingEntity: data, pageNumber: 0));
+      case ResultFailed(:final failure):
+        emit(OnboardingError(error: failure));
+    }
   }
 
   void _onNextPressed(OnNextPagePressed event, Emitter<OnboardingState> emit) {

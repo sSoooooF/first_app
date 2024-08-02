@@ -1,3 +1,4 @@
+import 'package:first_app/features/onboarding/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class GetStarted extends StatelessWidget {
@@ -35,7 +36,9 @@ class GetStarted extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     FilledButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+                      },
                       style: ButtonStyle(
                         fixedSize: WidgetStateProperty.all(const Size(double.maxFinite, 40)),
                       ),

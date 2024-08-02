@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:first_app/api/rest_client.dart';
 import 'package:first_app/features/onboarding/data/repository/onboarding_repoditory.dart';
 import 'package:first_app/features/onboarding/presentation/screens/get_started_screen.dart';
+import 'package:first_app/features/onboarding/presentation/screens/login_screen.dart';
 import 'package:first_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -24,8 +25,8 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Roboto',
 
       ),
-      home: OnboardingScreen(
-        repository: repository,
+      home: GetStarted(
+        //repository: repository,
       ),
     );
   }
