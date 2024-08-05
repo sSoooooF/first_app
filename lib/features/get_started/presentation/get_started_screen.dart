@@ -1,4 +1,5 @@
-import 'package:first_app/features/onboarding/presentation/screens/login_screen.dart';
+import 'package:first_app/features/auth/presentation/login/login_screen.dart';
+import 'package:first_app/features/auth/presentation/registration/register_screen.dart';
 import 'package:flutter/material.dart';
 
 class GetStarted extends StatelessWidget {
@@ -48,9 +49,11 @@ class GetStarted extends StatelessWidget {
                       height: 16,
                     ),
                     OutlinedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterScreen()));
+                      },
                       style: ButtonStyle(
-                        fixedSize: WidgetStateProperty.all(const Size.fromWidth(double.maxFinite)),
+                        fixedSize: WidgetStateProperty.all(const Size(double.maxFinite, 40)),
                       ),
                       child: const Text('Зарегистироваться'),
                     )

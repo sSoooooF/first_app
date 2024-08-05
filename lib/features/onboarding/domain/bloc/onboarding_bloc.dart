@@ -1,5 +1,5 @@
 import 'package:first_app/features/core/domain/entity/result.dart';
-import 'package:first_app/features/onboarding/data/repository/onboarding_repoditory.dart';
+import 'package:first_app/features/onboarding/data/repository/onboarding_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:first_app/features/onboarding/domain/onboarding_entity.dart';

@@ -1,17 +1,23 @@
 import 'package:dio/dio.dart';
-import 'package:first_app/api/rest_client.dart';
-import 'package:first_app/features/onboarding/data/repository/onboarding_repoditory.dart';
-import 'package:first_app/features/onboarding/presentation/screens/get_started_screen.dart';
-import 'package:first_app/features/onboarding/presentation/screens/login_screen.dart';
+import 'package:first_app/features/core/data/api/rest_client.dart';
+import 'package:first_app/features/core/data/settings_storage/settings_storage.dart';
+import 'package:first_app/features/onboarding/data/repository/onboarding_repository.dart';
 import 'package:first_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
+
   runApp(const MyApp());
 }
+// final SharedPreferences prefs = SharedPreferences.getInstance();
+//
+// final ISettingsRepository settingsRepository = SettingsRepository(prefs);
 
 final client = RestClient(Dio());
-final repository = OnboardingRepository(client: client);
+final repository = OnboardingRepository(client: client, /*settingsRepository: settingsRepository)*/);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -25,8 +31,8 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Roboto',
 
       ),
-      home: GetStarted(
-        //repository: repository,
+      home: OnboardingScreen(
+        repository: repository,
       ),
     );
   }
