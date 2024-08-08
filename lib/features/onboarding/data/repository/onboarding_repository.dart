@@ -4,13 +4,30 @@ import 'package:first_app/features/core/domain/entity/result.dart';
 import 'package:first_app/features/onboarding/domain/onboarding_entity.dart';
 
 abstract interface class IOnboardingRepository {
+  void setOnboardingCompleted();
+  bool isOnboardingCompleted();
   RequestOperation<OnboardingEntity> getOnboarding();
 }
 
 final class OnboardingRepository implements IOnboardingRepository {
   final RestClient _client;
-  //final SettingsRepository _settingsRepository;
-  OnboardingRepository({/*required SettingsRepository settingsRepository,*/ required RestClient client}) : _client = client/*, _settingsRepository = settingsRepository*/;
+  final ISettingsRepository _settingsRepository;
+
+  OnboardingRepository({
+    required RestClient client,
+    required ISettingsRepository settingsRepository,
+  })  : _client = client,
+        _settingsRepository = settingsRepository;
+
+  @override
+  bool isOnboardingCompleted() {
+    return _settingsRepository.isOnboardingCompleted();
+  }
+
+  @override
+  void setOnboardingCompleted() async {
+    await _settingsRepository.setOnboardingCompleted();
+  }
 
   @override
   RequestOperation<OnboardingEntity> getOnboarding() async {

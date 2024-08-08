@@ -6,21 +6,23 @@ import 'package:first_app/features/onboarding/presentation/screens/onboarding_sc
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-
-  runApp(const MyApp());
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final ISettingsRepository settingsRepository = SettingsRepository(prefs);
+  final client = RestClient(Dio());
+  final repository = OnboardingRepository(
+    client: client,
+    settingsRepository: settingsRepository,
+  );
+  runApp(MyApp(onboardingRepository: repository));
 }
-// final SharedPreferences prefs = SharedPreferences.getInstance();
-//
-// final ISettingsRepository settingsRepository = SettingsRepository(prefs);
-
-final client = RestClient(Dio());
-final repository = OnboardingRepository(client: client, /*settingsRepository: settingsRepository)*/);
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final OnboardingRepository? onboardingRepository;
+
+  const MyApp({super.key, required this.onboardingRepository});
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +31,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff336940)),
         fontFamily: 'Roboto',
-
       ),
       home: OnboardingScreen(
-        repository: repository,
+        repository: onboardingRepository,
       ),
     );
   }

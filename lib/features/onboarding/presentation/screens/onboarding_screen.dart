@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  final IOnboardingRepository repository;
+
+  final IOnboardingRepository? repository;
 
   const OnboardingScreen({
     super.key,
@@ -21,9 +22,12 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
+    if (widget.repository!.isOnboardingCompleted()) {
+      return const GetStarted();
+    }
     return BlocProvider<OnboardingBloc>(
       create: (context) =>
-      OnboardingBloc(widget.repository)
+      OnboardingBloc(widget.repository!)
         ..add(OnStartLoading()),
       child: BlocListener<OnboardingBloc, OnboardingState>(
         listenWhen: (c,p) {
@@ -74,6 +78,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                     .add(OnSkipPressed());
                               },
                               onStartPressed: () {
+                                widget.repository!.setOnboardingCompleted();
                                 Navigator.push(context, MaterialPageRoute(
                                     builder: (context) => const GetStarted()));
                               })
