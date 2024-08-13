@@ -124,11 +124,17 @@ class ControlButtons extends StatelessWidget {
         if (!_isLastPage)
           TextButton(
             onPressed: _onSkipPressed,
+            style: const ButtonStyle(
+              fixedSize: WidgetStatePropertyAll(Size(133, 40)),
+            ),
             child: const Text('Пропустить'),
           ),
         const Spacer(),
         FilledButton(
           onPressed: _isLastPage ? _onStartPressed : _onNextPressed,
+          style: const ButtonStyle(
+            fixedSize: WidgetStatePropertyAll(Size(133, 40)),
+          ),
           child: _isLastPage ? const Text('Начать') : const Text('Продолжить'),
         ),
       ],
