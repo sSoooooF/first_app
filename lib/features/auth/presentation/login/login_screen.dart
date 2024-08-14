@@ -13,23 +13,6 @@ class _LoginScreenState extends State<LoginScreen> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
 
-  bool _isValidEmail = false;
-  bool _isValidPassword = false;
-
-  void _validateEmail(String value) {
-    RegExp emailRegEx =
-    RegExp(r'([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)');
-    setState(() {
-      _isValidEmail = emailRegEx.hasMatch(value);
-    });
-  }
-
-  void _validatePassword(String value) {
-    setState(() {
-      _isValidPassword = value.length >= 8;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -109,13 +92,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const Spacer(),
                       FilledButton(
-                        onPressed: () {
-                          if (state is LoginSubmitted) {
-                            return;
-                          } else {
-                            return;
-                          }
-                        },
+                        // TODO: реализовать навигацию
+                        onPressed:  state is LoginSubmitted ? () {} : null,
                         style: ButtonStyle(
                           fixedSize: WidgetStateProperty.all(
                               const Size(double.maxFinite, 40)),
@@ -133,3 +111,11 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+
+
+// TODO: все репы возвращают requestOperation
+// TODO: неьсвязывать классы между собой на одном уровне
+// TODO: LogicSubmitted доделать
+// TODO: переделать валидацию и кнопку войти (25.50)
+
