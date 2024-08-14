@@ -27,16 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  VoidCallback? _getValidateStatus() =>
-      (_isValidEmail && _isValidPassword)
-          ? () {
-        print('Email: ${_emailController.text}');
-        print('Password: ${_passwordController.text}');
-        _emailController.clear();
-        _passwordController.clear();
-      }
-          : null;
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LoginBloc>(
