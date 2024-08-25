@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
 part 'login_event.dart';
@@ -6,46 +6,67 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc()
-      : super(const LoginState(
-          emailValidationState: EmailValidationStateValid(),
-          passwordValidationState: PasswordValidationStateValid(),
-        )) {
-    on<EmailChanged>(_onEmailChanged);
-    on<PasswordChanged>(_onPasswordChanged);
+  LoginBloc() : super(const LoginState()) {
+    on<EmailChangedEvent>(_onEmailChanged);
+    on<PasswordChangedEvent>(_onPasswordChanged);
+    on<LoginSubmittedEvent>(_onLoginSubmitted);
   }
 
-  void _onEmailChanged(EmailChanged event, Emitter<LoginState> emit) {
-    final email = event.email;
-    if (_isValidEmail(email)) {
-      emit(state.copyWith(
-          emailValidationState: const EmailValidationStateValid()));
-    } else {
-      emit(state.copyWith(
-          emailValidationState: const EmailValidationStateInvalid(
-              errorMessage: 'Invalid email format')));
+  void _onEmailChanged(EmailChangedEvent event, Emitter<LoginState> emit) {
+    final isValidEmail = _validateEmail(event.email);
+    emit(
+      state.copyWith(
+        email: event.email,
+        isFormValid: isValidEmail && state.password.isNotEmpty,
+        isSubmitted: false,
+      ),
+    );
+  }
+
+  void _onPasswordChanged(
+      PasswordChangedEvent event, Emitter<LoginState> emit) {
+    final isValidPassword = _validatePassword(event.password);
+    emit(
+      state.copyWith(
+        password: event.password,
+        isFormValid: state.email.isNotEmpty && isValidPassword,
+        isSubmitted: false,
+      ),
+    );
+  }
+
+  void _onLoginSubmitted(LoginSubmittedEvent event, Emitter<LoginState> emit) {
+    final isValidEmail = _validateEmail(state.email);
+    final isValidPassword = _validatePassword(state.password);
+
+    if (isValidEmail && isValidPassword) {
+      emit(NavigationState());
+      return;
     }
-  }
 
-  void _onPasswordChanged(PasswordChanged event, Emitter<LoginState> emit) {
-    final password = event.password;
-    if (_isValidPassword(password)) {
-      emit(state.copyWith(
-          passwordValidationState: const PasswordValidationStateValid()));
-    } else {
-      emit(state.copyWith(
-          passwordValidationState: const PasswordValidationStateInvalid(
-              errorMessage:
-                  'Password must contain at least 8 characters')));
+    String errorMessage = '';
+
+    if (!isValidEmail) {
+      errorMessage = 'Please enter a valid email address.';
     }
+
+    if (!isValidPassword) {
+      errorMessage = 'Password must be at least 6 characters long.';
+    }
+
+    emit(state.copyWith(
+      isSubmitted: true,
+      isFormValid: false,
+      errorMessage: errorMessage.trim(),
+    ));
   }
 
-  bool _isValidEmail(String email) {
-    return RegExp(r'([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)')
-        .hasMatch(email);
+  bool _validateEmail(String email) {
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    return emailRegex.hasMatch(email);
   }
 
-  bool _isValidPassword(String password) {
-    return password.length >= 8;
+  bool _validatePassword(String password) {
+    return password.length >= 6;
   }
 }

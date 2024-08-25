@@ -1,95 +1,72 @@
 part of 'registration_bloc.dart';
 
 class RegistrationState extends Equatable {
-  final EmailValidationState emailValidationState;
-  final PasswordValidationState passwordValidationState;
-  final RepeatedPasswordValidationState repeatedPasswordValidationState;
+  final String email;
+  final String password;
+  final String confirmPassword;
+  final bool isEmailValid;
+  final bool isPasswordValid;
+  final bool isConfirmPasswordValid;
+  final String emailError;
+  final String passwordError;
+  final String confirmPasswordError;
+  final bool isFormValid;
+  final bool isSubmitted;
 
   const RegistrationState({
-    required this.emailValidationState,
-    required this.passwordValidationState,
-    required this.repeatedPasswordValidationState,
+    this.email = '',
+    this.password = '',
+    this.confirmPassword = '',
+    this.isEmailValid = true,
+    this.isPasswordValid = true,
+    this.isConfirmPasswordValid = true,
+    this.emailError = '',
+    this.passwordError = '',
+    this.confirmPasswordError = '',
+    this.isFormValid = true,
+    this.isSubmitted = false,
   });
 
-  @override
-  // TODO: implement props
-  List<Object?> get props => [
-        emailValidationState,
-        passwordValidationState,
-        repeatedPasswordValidationState
-      ];
-
   RegistrationState copyWith({
-    EmailValidationState? emailValidationState,
-    PasswordValidationState? passwordValidationState,
-    RepeatedPasswordValidationState? repeatedPasswordValidationState,
+    String? email,
+    String? password,
+    String? confirmPassword,
+    bool? isEmailValid,
+    bool? isPasswordValid,
+    bool? isConfirmPasswordValid,
+    String? emailError,
+    String? passwordError,
+    String? confirmPasswordError,
+    bool? isFormValid,
+    bool? isSubmitted,
   }) {
     return RegistrationState(
-      emailValidationState: emailValidationState ?? this.emailValidationState,
-      passwordValidationState:
-          passwordValidationState ?? this.passwordValidationState,
-      repeatedPasswordValidationState: repeatedPasswordValidationState ??
-          this.repeatedPasswordValidationState,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      confirmPassword: confirmPassword ?? this.confirmPassword,
+      isEmailValid: isEmailValid ?? this.isEmailValid,
+      isPasswordValid: isPasswordValid ?? this.isPasswordValid,
+      isConfirmPasswordValid: isConfirmPasswordValid ?? this.isConfirmPasswordValid,
+      emailError: emailError ?? this.emailError,
+      passwordError: passwordError ?? this.passwordError,
+      confirmPasswordError: confirmPasswordError ?? this.confirmPasswordError,
+      isFormValid: isFormValid ?? this.isFormValid,
+      isSubmitted: isSubmitted ?? this.isSubmitted,
     );
   }
-}
-
-sealed class EmailValidationState extends Equatable {
-  final String? errorMessage;
-
-  const EmailValidationState({required this.errorMessage});
-}
-
-class EmailValidationStateValid extends EmailValidationState {
-  const EmailValidationStateValid() : super(errorMessage: null);
 
   @override
-  List<Object?> get props => [];
-}
-
-class EmailValidationStateInvalid extends EmailValidationState {
-  const EmailValidationStateInvalid({required super.errorMessage});
-
-  @override
-  List<Object?> get props => [];
-}
-
-sealed class PasswordValidationState extends Equatable {
-  final String? errorMessage;
-
-  const PasswordValidationState({required this.errorMessage});
-}
-
-class PasswordValidationStateInvalid extends PasswordValidationState {
-  const PasswordValidationStateInvalid({required super.errorMessage});
-
-  @override
-  List<Object?> get props => [];
-}
-
-class PasswordValidationStateValid extends PasswordValidationState {
-  const PasswordValidationStateValid() : super(errorMessage: null);
-
-  @override
-  List<Object?> get props => [];
-}
-
-sealed class RepeatedPasswordValidationState extends Equatable {
-  final String? errorMessage;
-
-  const RepeatedPasswordValidationState({required this.errorMessage});
-}
-
-class RepeatedPasswordValidationStateInvalid extends RepeatedPasswordValidationState {
-  const RepeatedPasswordValidationStateInvalid({required super.errorMessage});
-
-  @override
-  List<Object?> get props => [];
-}
-
-class RepeatedPasswordValidationStateValid extends RepeatedPasswordValidationState {
-  const RepeatedPasswordValidationStateValid() : super(errorMessage: null);
-
-  @override
-  List<Object?> get props => [];
+  List<Object?> get props => [
+    email,
+    password,
+    confirmPassword,
+    isEmailValid,
+    isPasswordValid,
+    isConfirmPasswordValid,
+    emailError,
+    passwordError,
+    confirmPasswordError,
+    isFormValid,
+    isSubmitted,
+  ];
 }

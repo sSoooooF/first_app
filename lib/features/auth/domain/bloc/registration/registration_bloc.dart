@@ -1,84 +1,69 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 
 part 'registration_event.dart';
 
 part 'registration_state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
-  RegistrationBloc()
-      : super(const RegistrationState(
-    repeatedPasswordValidationState:
-    RepeatedPasswordValidationStateValid(),
-    emailValidationState: EmailValidationStateValid(),
-    passwordValidationState: PasswordValidationStateValid(),
-  )) {
+  RegistrationBloc() : super(const RegistrationState()) {
     on<EmailChanged>(_onEmailChanged);
     on<PasswordChanged>(_onPasswordChanged);
-    on<RepeatedPasswordChanged>(_onRepeatedPasswordChanged);
-    on<FormSubmitted>(_onFormSubmitted);
+    on<ConfirmPasswordChanged>(_onConfirmPasswordChanged);
+    on<RegisterSubmitted>(_onRegisterSubmitted);
   }
 
   void _onEmailChanged(EmailChanged event, Emitter<RegistrationState> emit) {
-    final email = event.email;
-    if (_isValidEmail(email)) {
-      emit(state.copyWith(
-          emailValidationState: const EmailValidationStateValid()));
+    final isValidEmail = _validateEmail(event.email);
+    emit(state.copyWith(
+      email: event.email,
+      isEmailValid: isValidEmail,
+      emailError: isValidEmail ? '' : 'Неверный формат email',
+      isFormValid: isValidEmail && state.isPasswordValid && state.isConfirmPasswordValid,
+    ));
+  }
+
+  void _onPasswordChanged(PasswordChanged event, Emitter<RegistrationState> emit) {
+    final isValidPassword = _validatePassword(event.password);
+    final isConfirmPasswordValid = _validateConfirmPassword(event.password, state.confirmPassword);
+    emit(state.copyWith(
+      password: event.password,
+      isPasswordValid: isValidPassword,
+      isConfirmPasswordValid: isConfirmPasswordValid,
+      passwordError: isValidPassword ? '' : 'Пароль должен содержать минимум 6 символов',
+      confirmPasswordError: isConfirmPasswordValid ? '' : 'Пароли не совпадают',
+      isFormValid: state.isEmailValid && isValidPassword && isConfirmPasswordValid,
+    ));
+  }
+
+  void _onConfirmPasswordChanged(ConfirmPasswordChanged event, Emitter<RegistrationState> emit) {
+    final isConfirmPasswordValid = _validateConfirmPassword(state.password, event.confirmPassword);
+    emit(state.copyWith(
+      confirmPassword: event.confirmPassword,
+      isConfirmPasswordValid: isConfirmPasswordValid,
+      confirmPasswordError: isConfirmPasswordValid ? '' : 'Пароли не совпадают',
+      isFormValid: state.isEmailValid && state.isPasswordValid && isConfirmPasswordValid,
+    ));
+  }
+
+  void _onRegisterSubmitted(RegisterSubmitted event, Emitter<RegistrationState> emit) {
+    if (state.isFormValid) {
+      emit(state.copyWith(isSubmitted: true));
     } else {
-      emit(state.copyWith(
-          emailValidationState: const EmailValidationStateInvalid(
-              errorMessage: 'Invalid email format')));
+      emit(state.copyWith(isSubmitted: true));
     }
   }
 
-  void _onPasswordChanged(PasswordChanged event,
-      Emitter<RegistrationState> emit) {
-    final password = event.password;
-    if (_isValidPassword(password)) {
-      emit(state.copyWith(
-          passwordValidationState: const PasswordValidationStateValid()));
-    } else {
-      emit(state.copyWith(
-          passwordValidationState: const PasswordValidationStateInvalid(
-              errorMessage:
-              'Password must contain at least 8 characters')));
-    }
+  bool _validateEmail(String email) {
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    return emailRegex.hasMatch(email);
   }
 
-  void _onRepeatedPasswordChanged(RepeatedPasswordChanged event,
-      Emitter<RegistrationState> emit) {
-    final repeatedPassword = event.repeatedPassword;
-    if (_isPasswordMatching("12345678", repeatedPassword)) {
-      emit(state.copyWith(
-          repeatedPasswordValidationState: const RepeatedPasswordValidationStateValid()));
-    }
-    else {
-      emit(state.copyWith(
-          repeatedPasswordValidationState: const RepeatedPasswordValidationStateInvalid(
-              errorMessage: 'Passwords do not match')));
-    }
+  bool _validatePassword(String password) {
+    return password.length >= 6;
   }
 
-  void _onFormSubmitted(FormSubmitted event, Emitter<RegistrationState> emit) {
-    if (state.emailValidationState is EmailValidationStateValid && state
-        .passwordValidationState is PasswordValidationStateValid && state.repeatedPasswordValidationState is RepeatedPasswordValidationStateValid) {
-
-    }
+  bool _validateConfirmPassword(String password, String confirmPassword) {
+    return password == confirmPassword;
   }
-
-  bool _isValidEmail(String email) {
-    return RegExp(r'([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)')
-        .hasMatch(email);
-  }
-
-  bool _isValidPassword(String password) {
-    return password.length >= 8;
-  }
-
-  bool _isPasswordMatching(String password, String repeatedPassword) {
-    return password == repeatedPassword;
-  }
-
-
 }
