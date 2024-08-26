@@ -1,5 +1,5 @@
 import 'package:first_app/features/auth/presentation/login/login_screen.dart';
-import 'package:first_app/features/auth/presentation/registration/register_screen.dart';
+import 'package:first_app/features/auth/presentation/registration/registration_screen.dart';
 import 'package:flutter/material.dart';
 
 class GetStarted extends StatelessWidget {
@@ -7,9 +7,7 @@ class GetStarted extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final textTheme = Theme.of(context).textTheme;
-    final buttonStyle = Theme.of(context).buttonTheme;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -22,12 +20,12 @@ class GetStarted extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Text(
-                      'Добро пожаловать в UpTodo',
+                      'Добро пожаловать в UpTodo',
                       style: textTheme.headlineMedium,
                       textAlign: TextAlign.center,
                     ),
                     Text(
-                      'Войдите в приложение, чтобы не потерять доступ к своим задачам',
+                      'Войдите в приложение, чтобы не потерять доступ к своим задачам',
                       style: textTheme.bodyLarge,
                       textAlign: TextAlign.center,
                     ),
@@ -38,7 +36,7 @@ class GetStarted extends StatelessWidget {
                   children: [
                     FilledButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
                       },
                       style: ButtonStyle(
                         fixedSize: WidgetStateProperty.all(const Size(double.maxFinite, 40)),
@@ -50,7 +48,7 @@ class GetStarted extends StatelessWidget {
                     ),
                     OutlinedButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const RegistrationScreen()));
                       },
                       style: ButtonStyle(
                         fixedSize: WidgetStateProperty.all(const Size(double.maxFinite, 40)),

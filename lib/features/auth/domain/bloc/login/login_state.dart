@@ -1,73 +1,38 @@
 part of 'login_bloc.dart';
 
 class LoginState extends Equatable {
-  final EmailValidationState emailValidationState;
-  final PasswordValidationState passwordValidationState;
+  final String email;
+  final String password;
+  final bool isSubmitted;
+  final bool isFormValid;
+  final String errorMessage;
 
   const LoginState({
-    required this.emailValidationState,
-    required this.passwordValidationState,
+    this.email = '',
+    this.password = '',
+    this.isSubmitted = true,
+    this.isFormValid = false,
+    this.errorMessage = '',
   });
 
-  @override
-  List<Object?> get props => [
-        emailValidationState,
-        passwordValidationState,
-      ];
-
   LoginState copyWith({
-    EmailValidationState? emailValidationState,
-    PasswordValidationState? passwordValidationState,
+    String? email,
+    String? password,
+    bool? isSubmitted,
+    bool? isFormValid,
+    String? errorMessage,
   }) {
     return LoginState(
-      emailValidationState: emailValidationState ?? this.emailValidationState,
-      passwordValidationState:
-          passwordValidationState ?? this.passwordValidationState,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      isSubmitted: isSubmitted ?? this.isSubmitted,
+      isFormValid: isFormValid ?? this.isFormValid,
+      errorMessage: errorMessage?? this.errorMessage,
     );
   }
-}
-
-sealed class EmailValidationState extends Equatable {
-  final String? errorMessage;
-
-  const EmailValidationState({required this.errorMessage});
-}
-
-class EmailValidationStateValid extends EmailValidationState {
-  const EmailValidationStateValid() : super(errorMessage: null);
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [email, password, isSubmitted, isFormValid, errorMessage];
 }
 
-class EmailValidationStateInvalid extends EmailValidationState {
-  const EmailValidationStateInvalid({required super.errorMessage});
-
-  @override
-  List<Object?> get props => [];
-}
-
-sealed class PasswordValidationState extends Equatable {
-  final String? errorMessage;
-
-  const PasswordValidationState({required this.errorMessage});
-}
-
-class PasswordValidationStateValid extends PasswordValidationState {
-  const PasswordValidationStateValid() : super(errorMessage: null);
-
-  @override
-  List<Object?> get props => [];
-}
-
-class PasswordValidationStateInvalid extends PasswordValidationState {
-  const PasswordValidationStateInvalid({required super.errorMessage});
-
-  @override
-  List<Object?> get props => [];
-}
-
-class LoginSubmitted extends LoginState {
-  const LoginSubmitted({required super.emailValidationState, required super.passwordValidationState});
-
-}
+class NavigationState extends LoginState {}

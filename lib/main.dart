@@ -14,15 +14,21 @@ void main() async {
   final client = RestClient(Dio());
   final repository = OnboardingRepository(
     client: client,
-    settingsRepository: settingsRepository,
   );
-  runApp(MyApp(onboardingRepository: repository));
+  runApp(MyApp(
+    onboardingRepository: repository,
+    settingsRepository: settingsRepository,
+  ));
 }
 
 class MyApp extends StatelessWidget {
   final OnboardingRepository? onboardingRepository;
+  final ISettingsRepository? settingsRepository;
 
-  const MyApp({super.key, required this.onboardingRepository});
+  const MyApp(
+      {super.key,
+      required this.onboardingRepository,
+      required this.settingsRepository});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +40,7 @@ class MyApp extends StatelessWidget {
       ),
       home: OnboardingScreen(
         repository: onboardingRepository,
+        settingsRepository: settingsRepository,
       ),
     );
   }

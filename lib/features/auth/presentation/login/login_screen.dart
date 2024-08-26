@@ -10,90 +10,60 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late final TextEditingController _emailController;
-  late final TextEditingController _passwordController;
-
-  @override
-  void initState() {
-    super.initState();
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<LoginBloc>(
-      create: (context) => LoginBloc(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Вход'),
-        ),
-        body: SafeArea(
-          child: Padding(
-            padding:
-            const EdgeInsets.only(bottom: 32, top: 64, left: 16, right: 16),
-            child: Center(
-              child: BlocBuilder<LoginBloc, LoginState>(
-                builder: (context, state) {
-                  return Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Вход'),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding:
+          const EdgeInsets.only(bottom: 32, top: 64, left: 16, right: 16),
+          child: BlocProvider(
+            create: (context) => LoginBloc(),
+            child: BlocBuilder<LoginBloc, LoginState>(
+              builder: (context, state) {
+                return Center(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextFormField(
-                        controller: _emailController,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: InputDecoration(
+                        onChanged: (value) =>
+                            context.read<LoginBloc>().add(
+                                EmailChangedEvent(email: value)),
+                        decoration: const InputDecoration(
                           labelText: 'Email',
-                          errorText: state.emailValidationState
-                          is EmailValidationStateInvalid
-                              ? "Invalid email format"
-                              : null,
-                          border: const OutlineInputBorder(),
+                          border: OutlineInputBorder(),
                         ),
-                        onChanged: (email) {
-                          context
-                              .read<LoginBloc>()
-                              .add(EmailChanged(email: email));
-                        },
                       ),
                       const SizedBox(height: 32),
                       TextFormField(
-                        controller: _passwordController,
-                        decoration: InputDecoration(
+                        onChanged: (value) =>
+                            context.read<LoginBloc>().add(
+                                PasswordChangedEvent(password: value)),
+                        decoration: const InputDecoration(
                           labelText: 'Пароль',
-                          errorText: state.passwordValidationState
-                          is PasswordValidationStateInvalid
-                              ? "Password must be at least 8 characters long"
-                              : null,
-                          border: const OutlineInputBorder(),
+                          border: OutlineInputBorder(),
                         ),
-                        onChanged: (password) {
-                          context
-                              .read<LoginBloc>()
-                              .add(PasswordChanged(password: password));
-                        },
                         obscureText: true,
                       ),
                       const Spacer(),
                       FilledButton(
-                        // TODO: реализовать навигацию
-                        onPressed:  state is LoginSubmitted ? () {} : null,
                         style: ButtonStyle(
                           fixedSize: WidgetStateProperty.all(
                               const Size(double.maxFinite, 40)),
                         ),
+                        onPressed: state.isFormValid ? () {
+                          context.read<LoginBloc>().add(
+                              const LoginSubmittedEvent());
+                        } : null,
                         child: const Text('Войти'),
-                      )
+                      ),
                     ],
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ),
         ),
@@ -101,11 +71,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-
-
-// TODO: все репы возвращают requestOperation
-// TODO: неьсвязывать классы между собой на одном уровне
-// TODO: LogicSubmitted доделать
-// TODO: переделать валидацию и кнопку войти (25.50)
-
