@@ -7,9 +7,7 @@ class GetStarted extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final textTheme = Theme.of(context).textTheme;
-    final buttonStyle = Theme.of(context).buttonTheme;
     return Scaffold(
       body: SafeArea(
         child: Padding(
